@@ -1,0 +1,127 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout_Header.cshtml";
+    ViewBag.Title = "DetailsForAdmin";
+}
+
+@section css
+{
+    <link href="@Url.Content("~/Content/order.css")" rel="stylesheet" type="text/css" />
+}
+@using CakeShop.Models
+
+@{
+    Order o = ViewData["Order"] as Order;
+    List<OrderDetail> listOD = ViewData["OrderDetail"] as List<OrderDetail>;
+    float total = 0;
+    List<string> listStatus = new List<string>() { "accept", "cancle",  "deliver", "complete" };
+}
+<div class="container-fluid my-5 d-flex justify-content-center">
+    <div class="card card-1">
+        <div class="card-header bg-white">
+            <div class="media flex-sm-row flex-column-reverse justify-content-between ">
+                <div class="col my-auto">
+                    <h4 class="mb-0">Thanks for your Order,<span class="change-color">@o.username</span> !</h4>
+                </div>
+               @* <div class="col-auto text-center my-auto pl-0 pt-sm-4">
+                    <img class="img-fluid my-auto align-items-center mb-0 pt-3" src="@Url.Content("~/Content/img/logo.png")" width="115" height="115" style=" position: relative; top: -25px;">
+                </div>*@
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row justify-content-between mb-3">
+                <div class="col-auto">
+                    <h6 class="color-1 mb-0 change-color">Invoice Date : @o.createdOn</h6>
+                </div>
+                <div class="col-auto">
+                    <form action="../../Order/EditForAdmin" method="post">
+                        <select name="newStatus">
+                            @foreach (var s in listStatus)
+                            {
+                                string select = (s.Equals(o.status)) ? "selected" : "";
+                                <option value="@s" class="" @select>@s</option>
+                            }
+                        </select>
+                        <input type="hidden" value="@o.orderID" name="id"/>
+                        <br />
+                        <input type="submit" value="Save" style=" background: transparent; margin-top: 10px; width: 97px; border: 1px solid lightgrey; color: darkgray;" />
+                    </form>
+                    <a href="#deleteEmployeeModal" style="color: darkgray;" data-toggle="modal" id="bin" class="@o.orderID"><button type="button" style="background: transparent; margin-top: 10px; width: 97px; border: 1px solid lightgrey; color: darkgray;">Delete</button></a>
+                </div>
+            </div>
+            @{
+                if (listOD != null)
+                {
+                    for (int i = 0; i < listOD.Count; i++)
+                    {
+                        OrderDetail od = listOD[i];
+                        <div class="row">
+                            <div class="col">
+                                <div class="card card-2">
+                                    <div class="card-body">
+
+                                        <div class="media">
+                                            <div class="media-body my-auto text-right">
+                                                <div class="row my-auto flex-column flex-md-row">
+                                                    <div class="col my-auto">
+                                                        <h6 class="mb-0" style=" width: 500px; text-align: left;">@od.Product.productName</h6>
+                                                    </div>
+                                                    <div class="col my-auto"> <small>Qty : @od.quantity</small></div>
+                                                    <div class="col my-auto">
+                                                        <h6 class="mb-0">$ @(od.quantity * od.Product.price)</h6>
+                                                        @{total += od.quantity * od.Product.price; }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="my-3 ">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+        <div class="card-footer">
+            <div class="jumbotron-fluid">
+                <div class="row justify-content-between ">
+                    <div class="col-auto my-auto ">
+                        <h2 class="mb-0 font-weight-bold">TOTAL PAID</h2>
+                    </div>
+                    <div class="col-auto my-auto ml-auto">
+                        <h1 class="display-3 ">$ @total</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Modal HTML -->
+<div id="deleteEmployeeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="../../Order/Delete" method="POST">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Order</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete these Records?</p>
+                    <p class="text-warning"><small>This action cannot be undone.</small></p>
+                </div>
+                <input type="hidden" id="oid" name="oid" style="margin-left: 100px;" />
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                    <input type="submit" class="btn btn-danger" value="Delete" id="delete">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Register Form End -->
+<script>
+    document.querySelector('#bin').onclick = function () {
+        $('#oid').val($('#bin').attr('class'));
+    }
+</script>

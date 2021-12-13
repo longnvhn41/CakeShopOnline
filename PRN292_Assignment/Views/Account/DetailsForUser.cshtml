@@ -1,0 +1,104 @@
+﻿
+
+@{
+    Layout = "~/Views/Shared/_Layout_Header.cshtml";
+    ViewBag.Title = "DetailsForUser";
+}
+@using CakeShop.Models;
+@{
+    UserDetail ud = Session["user"] as UserDetail;
+}
+<div class="container rounded  mt-5" style="border: 1px solid black; margin-bottom: 100px; background-color: #FE9A2E;">
+
+    <div class="row">
+
+        <div class="col-md-4 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" src="@Url.Content("~/Content/img/ava/"+ ud.imageLink)" width="250"><span class="font-weight-bold">@ud.username</span><span class="text-black-50">@ud.email</span></div>
+
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-6">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    @*<a href="@Url.Action("Index","Home")">
+                        <div class="d-flex flex-row align-items-center back"style="margin-bottom:200px;">
+                            <i class="fa fa-long-arrow-left mr-1 mb-1"></i>
+                            <h6>Back to home</h6>
+                        </div>
+                    </a>*@
+                </div>
+                <form action="EditForUser" method="Post" enctype="multipart/form-data">
+                    <div class="row mt-2">
+                        <div class="col-md-12"><input type="text" required class="form-control" placeholder="first name" value="@ud.fullname" name="fullname"></div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12"><input type="email" class="form-control" placeholder="Email" value="@ud.email"  name="email" required></div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12"><input type="text" required class="form-control" placeholder="Address" value="@ud.address"  name="address"></div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12"><input type="tel" required pattern="[0-9]{10}" class="form-control" placeholder="Phone" value="@ud.phone"  name="phone"></div>
+                    </div>
+                    <div>
+                        <input type="file" class="btn btn-default" accept="image/*" id="imageFile" name="imageFile" value="" style="font-size: 15px; margin-top: 10px;position: relative;left: -13px;display: inline-block;">
+                        <input type="button" class="btn btn-default" style=" border-color: grey; font-size: 15px; padding: 3px 5px; margin: 11px; width: 95px; display: inline-block; margin-right: 0; float: right;" value="Clear file" id="clearFile">
+                    </div>
+                    <div class="row mt-3">
+                        <input id="checkbox_changepassword" type="checkbox" name="changePassword" onchange="changePassFunction()" style=" top: 5px; position: relative; left: 22px;">
+                        <span style="color: green; position: relative; left: 35px;">Change password</span>
+                    </div>
+                    <div class="row mt-3" id="change_password" style="display:none;">
+                        <div class="col-md-1"></div><div class="col-md-6"><input type="password" class="form-control" name="oldPassword" id="oldPassword" placeholder="Old Password"></div><div class="col-md-5"></div><br />
+                        <div class="col-md-1"></div><div class="col-md-6"><input type="password" class="form-control" name="newPassword" id="newPassword" placeholder="New Password"></div><div class="col-md-5"></div><br />
+                        <div class="col-md-1"></div><div class="col-md-6"><input type="password" class="form-control" name="reNewPassword" id="reNewPassword" placeholder="Re-password"></div><div class="col-md-5"></div>
+                       <input type="hidden" value="@ud.Account.password" id="cfPass">
+                    </div>
+                    <div class="mt-5 text-center"><button class="btn btn-primary profile-button" onclick="return checkPassword()" type="submit">Save Profile</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function changePassFunction() {
+        if (document.getElementById("checkbox_changepassword").checked) {
+            document.getElementById("change_password").style.display = "block";
+            document.getElementById("oldPassword").setAttribute('required', 'true');
+            document.getElementById("newPassword").setAttribute('required', 'true');
+            document.getElementById("reNewPassword").setAttribute('required', 'true');
+        } else {
+            document.getElementById("change_password").style.display = "none";
+            document.getElementById("oldPassword").removeAttribute('required');
+            document.getElementById("newPassword").removeAttribute('required');
+            document.getElementById("reNewPassword").removeAttribute('required');
+        }
+    }
+
+
+    function checkPassword() {
+        if (document.getElementById("checkbox_changepassword").checked) {
+            var pass = document.getElementById("newPassword").value;
+            var repass = document.getElementById("reNewPassword").value;
+            var oldpass = document.getElementById("oldPassword").value;
+            var cfpass = document.getElementById("cfPass").value;
+            if (pass !== repass) {
+                alert('Password and confirm password does not match');
+                return false;
+            }
+            if (oldpass !== cfpass) {
+                alert('Password is incorrect');
+                return false;
+            }
+            return true;
+        }
+        return true;
+    }
+
+    @*document.querySelector('#clearFile').onclick = function () {
+        $('#imageFile').val('');
+    }*@
+</script>
+
+
+

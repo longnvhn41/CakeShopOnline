@@ -1,0 +1,111 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout_Header.cshtml";
+    ViewBag.Title = "DetailsForCustomer";
+}
+@using CakeShop.Models;
+@section css
+{
+    <link href="@Url.Content("~/Content/order.css")" rel="stylesheet" type="text/css" />
+}
+
+@{
+    UserDetail ud = Session["user"] as UserDetail;
+    Order o = ViewData["Order"] as Order;
+    List<OrderDetail> listOD = ViewData["OrderDetail"] as List<OrderDetail>;
+    float total = 0;
+}
+<div class="container-fluid my-5 d-flex justify-content-center"style="background-color: #FE9A2E;">
+    <div class="card card-1">
+        <div class="card-header bg-white">
+            <div class="media flex-sm-row flex-column-reverse justify-content-between ">
+                <div class="col my-auto">
+                    <h4 class="mb-0">Thanks for your Order,<span class="change-color">@ud.fullname </span> !</h4>
+                </div>
+               @* <div class="col-auto text-center my-auto pl-0 pt-sm-4">
+                    <img class="img-fluid my-auto align-items-center mb-0 pt-3" src="@Url.Content("~/Content/img/logo.png")" width="115" height="115" style=" position: relative; top: -25px;">
+                </div>*@
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row justify-content-between mb-3">
+                <div class="col-auto">
+                    <h6 class="color-1 mb-0 change-color">Invoice Date : @o.createdOn</h6>
+                </div>
+                <div class="col-auto">
+                    @{
+                        if (o.status.Equals("request"))
+                        {
+                            <a href="@Url.Action("EditForCustomer", "Order", new { ID = o.orderID, newStatus = "cancel" })"><img src="@Url.Content("~/Content/img/reject.png")" style="width: 25px; height:25px;" /></a>
+                        }
+                        else if (o.status.Equals("reject"))
+                        {
+                            <a href="@Url.Action("EditForCustomer", "Order", new { ID = o.orderID, newStatus = "rejectHidden" })"><img src="@Url.Content("~/Content/img/confirm.png")" style="width: 25px; height:25px;" /></a>
+                        }
+                        else if (o.status.Equals("cancelReject"))
+                        {
+                            <a href="@Url.Action("EditForCustomer", "Order", new { ID = o.orderID, newStatus = "cancelRejectHidden" })"><img src="@Url.Content("~/Content/img/confirm.png")" style="width: 25px; height:25px;" /></a>
+                        }
+                        else if (o.status.Equals("cancelAccept"))
+                        {
+                            <a href="@Url.Action("EditForCustomer", "Order", new { ID = o.orderID, newStatus = "cancelAcceptHidden" })"><img src="@Url.Content("~/Content/img/complete.jpg")" style=" width: 40px; height: 40px;" /></a>
+                        }
+                        else if (o.status.Equals("deliver"))
+                        {
+                            <a href="@Url.Action("EditForCustomer", "Order", new { ID = o.orderID, newStatus = "complete" })"><img src="@Url.Content("~/Content/img/confirm.png")" style="width: 25px; height:25px;" /></a>
+                        }
+                        else
+                        {
+                            <a href="#"><img src="@Url.Content("~/Content/img/waiting.png")" style=" width: 25px; height: 25px;" /></a>
+                        }
+                    }
+                </div>
+            </div> @{
+                if (listOD != null)
+                {
+                    for (int i = 0; i < listOD.Count; i++)
+                    {
+                        OrderDetail od = listOD[i];
+                        <div class="row">
+                            <div class="col">
+                                <div class="card card-2">
+                                    <div class="card-body">
+
+                                        <div class="media">
+                                            <div class="media-body my-auto text-right">
+                                                <div class="row my-auto flex-column flex-md-row">
+                                                    <div class="col my-auto">
+                                                        <h6 class="mb-0" style=" width: 500px; text-align: left;">@od.Product.productName</h6>
+                                                    </div>
+                                                    <div class="col my-auto"> <small>Qty : @od.quantity</small></div>
+                                                    <div class="col my-auto">
+                                                        <h6 class="mb-0">$ @(od.quantity * od.Product.price)</h6>
+                                                        @{total += od.quantity * od.Product.price; }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="my-3 ">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+        <div class="card-footer">
+            <div class="jumbotron-fluid">
+                <div class="row justify-content-between ">
+                    <div class="col-auto my-auto ">
+                        <h2 class="mb-0 font-weight-bold">TOTAL PAID</h2>
+                    </div>
+                    <div class="col-auto my-auto ml-auto">
+                        <h1 class="display-3 ">$ @total</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

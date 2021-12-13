@@ -1,0 +1,121 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout_Header_Nav.cshtml";
+    ViewBag.Title = "DetailsForCustomer";
+}
+@using CakeShop.Models;
+
+@{
+    ProductDetail p = ViewData["ProductDetail"] as ProductDetail;
+
+}
+@*@{
+    List<Comment> listc = Session["listCmt"] as List<Comment>;
+    if (listc == null)
+    {
+        Comment c = new Comment();
+        c.commentID = 0;
+        c.username = "";
+        c.productID = 0;
+
+        c.content = "";
+                    listc.Add(c);
+    }
+}*@
+<!-- Breadcrumb Section Begin -->
+<!--<section class="breadcrumb-section set-bg" data-setbg="@Url.Content("~/Content/img/download.jpg")">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">-->
+                   @* <h2>Manh Hieu Shop</h2>*@
+                <!--</div>
+            </div>
+        </div>
+    </div>
+</section>-->
+<!-- Breadcrumb Section End -->
+<!-- Product Details Section Begin -->
+<section class="product-details spad"style="background-color: #FE9A2E;">
+    <div class="container"style="background-color: #FE9A2E;">
+        <div class="row">
+            <div class="col-lg-6 col-md-6">
+                <div class="product__details__pic">
+                    <div class="product__details__pic__item">
+                        <img class="product__details__pic__item--large"
+                             src="@Url.Content("~/Content/img/product/details/"+p.imageLink)" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="product__details__text">
+                    <h3>@p.Product.productName</h3>
+                    <div class="product__details__price">$@p.Product.price</div>
+                    <form action="../../Cart/InsertToCart" method="get">
+                        <div class="product__details__quantity">
+                            <div class="quantity">
+                                @*<div class="pro-qty">*@
+                                <input type="number" min="1" max="@p.Product.quantity" value="1" name="num" style="height: 50px; font-size: 25px;">
+                                @*</div>*@
+                            </div>
+                        </div>
+                        <input type="hidden" value="@p.productID" name="id" />
+                        <input type="submit" value="ADD TO CART" class=" primary-btn"style="background-color: #FF6347;border:none" />
+                    </form>
+                    <ul>
+                        <li><b>Origin</b> <span>@p.origin</span></li>
+                        <li><b>Weight</b> <span>@p.netWeight</span></li>
+                        <li>
+                            <b>Share on</b>
+                            <div class="share">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                                <a href="#"><i class="fa fa-pinterest"></i></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="product__details__tab">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
+                               aria-selected="true">Description</a>
+                        </li>
+                        @*<li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
+                               aria-selected="false">Reviews</a>
+                        </li>*@
+                    </ul>
+                   @* <p style="color: red">Comment</p> <br>*@
+
+                  @*  @foreach (Comment com in listc)
+                    {
+                        <p>@com.username :</p> <p>@com.content</p>
+                    }*@
+
+
+                   @* <form action="../../Product/insertCmt" method="post">
+                        <input type="text" placeholder="cmt" required="" name="comment" size="30">
+
+                        <input type="submit" value="send">
+                    </form>*@
+
+                    <p></p>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                            <div class="product__details__tab__desc">
+                                <h6>Products ingredients</h6>
+                                <p>@p.ingredients</p>
+                                <h6>Products Infomation</h6>
+                                <p>@p.description</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Product Details Section End -->

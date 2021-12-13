@@ -1,0 +1,219 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout_Header_Nav.cshtml";
+    ViewBag.Title = "Home";
+}
+@using CakeShop.Models;
+@{
+    int count = 0;
+    int countChoco = 0;
+    int countbc = 0;
+    int countes = 0;
+}
+<!-- Categories Section Begin -->
+<section class="categories" style="background: #FE9A2E">
+    <div class="container">
+        <div class="row">
+            <div class="categories__slider owl-carousel">
+                <div class="col-lg-3">
+                    <div class="categories__item set-bg" data-setbg="@Url.Content("~/Content/img/categories/categories_mochi.jpg")">
+                        <h5><a href="@Url.Action("IndexForCustomer", "Product", new { ID = 1 })">Mochi</a></h5>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="categories__item set-bg" data-setbg="@Url.Content("~/Content/img/categories/hpbd.jpg")">
+                        <h5><a href="@Url.Action("IndexForCustomer", "Product", new { ID = 2 })">Happy Birthday Cake</a></h5>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="categories__item set-bg" data-setbg="@Url.Content("~/Content/img/categories/banh_trung_thu.jpg")">
+                        <h5><a href="@Url.Action("IndexForCustomer", "Product", new { ID = 3 })"> Moon cake</a></h5>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="categories__item set-bg" data-setbg="@Url.Content("~/Content/img/categories/banhmi.jpg")">
+                        <h5><a href="@Url.Action("IndexForCustomer", "Product", new { ID = 4 })">Baguette </a></h5>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="categories__item set-bg" data-setbg="@Url.Content("~/Content/img/categories/Tiramisu.jpg")">
+                        <h5><a href="@Url.Action("IndexForCustomer", "Product", new { ID = 5 })">Tiramisu </a></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Categories Section End -->
+<!-- Featured Section Begin -->
+<section class="featured spad"style="background: #FE9A2E">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2> Product</h2>
+                </div>
+                @*<div class="featured__controls">
+                    <ul>
+                        <li class="active" data-filter="*">@{count = 0;} All</li>
+                        <li data-filter=".acer">@{count = 0; countChoco = 0;}Acer</li>
+                        <li data-filter=".asus">@{count = 0; countbc = 0;}Asus</li>
+                        <li data-filter=".mac">@{count = 0; countes = 0;}Macbook</li>
+                        <li data-filter=".dell">@{count = 0; countes = 0;}Dell</li>
+
+                        <li data-filter=".msi">@{count = 0; countes = 0;}MSI</li>
+                    </ul>
+                </div>*@
+            </div>
+        </div>
+    </div>
+    <div class="container"style="background: #FE9A2E">
+        <div class="row featured__filter">
+            @{
+                List<ProductDetail> listP = ViewData["ProductList"] as List<ProductDetail>;
+                if (listP != null)
+                {
+                    foreach (ProductDetail p in listP)
+                    {
+                        count++;
+                    if (count < 100)
+                    {
+                        if (p.Product.productCategoryID == 1 && countChoco < 3)
+                        {
+                            countChoco++;
+                            <div class="col-lg-3 col-md-4 col-sm-6 mix acer" style="height: 380px; width: 290px;">
+                                <div class="featured__item">
+                                    <div class="featured__item__pic set-bg" data-setbg="@Url.Content("~/Content/img/product/details/"+p.imageLink)" style="width: 260px; height:270px">
+                                        <ul class="featured__item__pic__hover">
+                                            @{
+                                                if (Session["user"] != null)
+                                                {
+                                                    <li> <a href="@Url.Action("InsertToCart","Cart", new { id = p.productID })"><i class="fa fa-shopping-cart"></i></a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li><a href="@Url.Action("Login","Account")"><i class="fa fa-shopping-cart"></i></a></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div class="featured__item__text">
+                                        <h6><a href="@Url.Action("DetailsForCustomer","Product", new { id = p.productID })">@p.Product.productName</a></h6>
+                                        <h5>$@p.Product.price</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        if (p.Product.productCategoryID == 2 && countes < 10)
+                        {
+                            countes++;
+                            <div class="col-lg-3 col-md-4 col-sm-6 mix asus">
+                                <div class="featured__item">
+                                    <div class="featured__item__pic set-bg" data-setbg="@Url.Content("~/Content/img/product/details/"+p.imageLink)" style="width: 260px; height:270px">
+                                        <ul class="featured__item__pic__hover">
+                                            @{
+                                                if (Session["user"] != null)
+                                                {
+                                                    <li> <a href="@Url.Action("InsertToCart","Cart", new { id = p.productID })"><i class="fa fa-shopping-cart"></i></a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li><a href="@Url.Action("Login","Account")"><i class="fa fa-shopping-cart"></i></a></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div class="featured__item__text">
+                                        <h6><a href="@Url.Action("DetailsForCustomer","Product", new { id = p.productID })">@p.Product.productName</a></h6>
+                                        <h5>$@p.Product.price</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        if (p.Product.productCategoryID == 3 && countes < 3)
+                        {
+                            countes++;
+                            <div class="col-lg-3 col-md-4 col-sm-6 mix mac">
+                                <div class="featured__item">
+                                    <div class="featured__item__pic set-bg" data-setbg="@Url.Content("~/Content/img/product/details/"+p.imageLink)" style="width: 260px; height:270px">
+                                        <ul class="featured__item__pic__hover">
+                                            @{
+                                                if (Session["user"] != null)
+                                                {
+                                                    <li> <a href="@Url.Action("InsertToCart","Cart", new { id = p.productID })"><i class="fa fa-shopping-cart"></i></a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li><a href="@Url.Action("Login","Account")"><i class="fa fa-shopping-cart"></i></a></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div class="featured__item__text">
+                                        <h6><a href="@Url.Action("DetailsForCustomer","Product", new { id = p.productID })">@p.Product.productName</a></h6>
+                                        <h5>$@p.Product.price</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        if (p.Product.productCategoryID == 4 && countbc < 3)
+                        {
+                            countbc++;
+                            <div class="col-lg-3 col-md-4 col-sm-6 mix dell">
+                                <div class="featured__item">
+                                    <div class="featured__item__pic set-bg" data-setbg="@Url.Content("~/Content/img/product/details/"+p.imageLink)" style="width: 260px; height:270px">
+                                        <ul class="featured__item__pic__hover">
+                                            @{
+                                                if (Session["user"] != null)
+                                                {
+                                                    <li> <a href="@Url.Action("InsertToCart","Cart", new { id = p.productID })"><i class="fa fa-shopping-cart"></i></a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li><a href="@Url.Action("Login","Account")"><i class="fa fa-shopping-cart"></i></a></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div class="featured__item__text">
+                                        <h6><a href="@Url.Action("DetailsForCustomer","Product", new { id = p.productID })">@p.Product.productName</a></h6>
+                                        <h5>$@p.Product.price</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        if (p.Product.productCategoryID == 5 && countes < 10)
+                        {
+                            countes++;
+                            <div class="col-lg-3 col-md-4 col-sm-6 mix msi">
+                                <div class="featured__item">
+                                    <div class="featured__item__pic set-bg" data-setbg="@Url.Content("~/Content/img/product/details/"+p.imageLink)" style="width: 260px; height:270px">
+                                        <ul class="featured__item__pic__hover">
+                                            @{
+                                                if (Session["user"] != null)
+                                                {
+                                                    <li> <a href="@Url.Action("InsertToCart","Cart", new { id = p.productID })"><i class="fa fa-shopping-cart"></i></a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li><a href="@Url.Action("Login","Account")"><i class="fa fa-shopping-cart"></i></a></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div class="featured__item__text">
+                                        <h6><a href="@Url.Action("DetailsForCustomer","Product", new { id = p.productID })">@p.Product.productName</a></h6>
+                                        <h5>$@p.Product.price</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        }
+                    }
+                }
+            }
+        </div>
+    </div>
+</section>
+<!-- Featured Section End -->

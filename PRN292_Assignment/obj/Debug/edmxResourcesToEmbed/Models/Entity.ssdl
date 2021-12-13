@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PRN292Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="username" />
+    </Key>
+    <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="type" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Comment">
+    <Key>
+      <PropertyRef Name="commentID" />
+    </Key>
+    <Property Name="commentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="nvarchar" MaxLength="50" />
+    <Property Name="productID" Type="int" />
+    <Property Name="createdOn" Type="datetime" Nullable="false" />
+    <Property Name="content" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Coupon">
+    <Key>
+      <PropertyRef Name="discountCode" />
+    </Key>
+    <Property Name="discountCode" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="username" Type="nvarchar" MaxLength="50" />
+    <Property Name="percent" Type="int" Nullable="false" />
+    <Property Name="createdOn" Type="datetime" Nullable="false" />
+    <Property Name="expiryDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="orderID" />
+    </Key>
+    <Property Name="orderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="nvarchar" MaxLength="50" />
+    <Property Name="discountCode" Type="varchar" MaxLength="10" />
+    <Property Name="deliverAddress" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="phone" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="createdOn" Type="datetime" Nullable="false" />
+    <Property Name="status" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrderDetail">
+    <Key>
+      <PropertyRef Name="orderDetailID" />
+    </Key>
+    <Property Name="orderDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="orderID" Type="int" />
+    <Property Name="productID" Type="int" />
+    <Property Name="quantity" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="productID" />
+    </Key>
+    <Property Name="productID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="productCategoryID" Type="int" />
+    <Property Name="productName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="price" Type="real" Nullable="false" />
+    <Property Name="quantity" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProductCategory">
+    <Key>
+      <PropertyRef Name="productCategoryID" />
+    </Key>
+    <Property Name="productCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="productCategoryName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProductDetail">
+    <Key>
+      <PropertyRef Name="productDetailID" />
+    </Key>
+    <Property Name="productDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="productID" Type="int" />
+    <Property Name="origin" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ingredients" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="netWeight" Type="int" Nullable="false" />
+    <Property Name="description" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserDetail">
+    <Key>
+      <PropertyRef Name="username" />
+    </Key>
+    <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="fullname" Type="nvarchar(max)" />
+    <Property Name="email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="phone" Type="varchar" MaxLength="10" />
+    <Property Name="address" Type="nvarchar(max)" />
+  </EntityType>
+  <Association Name="FK__Comment__product__4F7CD00D">
+    <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="productID" />
+      </Principal>
+      <Dependent Role="Comment">
+        <PropertyRef Name="productID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Comment__usernam__4E88ABD4">
+    <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+    <End Role="Comment" Type="Self.Comment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="username" />
+      </Principal>
+      <Dependent Role="Comment">
+        <PropertyRef Name="username" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Coupon__username__3C69FB99">
+    <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+    <End Role="Coupon" Type="Self.Coupon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="username" />
+      </Principal>
+      <Dependent Role="Coupon">
+        <PropertyRef Name="username" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Order__discountC__47DBAE45">
+    <End Role="Coupon" Type="Self.Coupon" Multiplicity="0..1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Coupon">
+        <PropertyRef Name="discountCode" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="discountCode" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Order__username__46E78A0C">
+    <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="username" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="username" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderDeta__order__4AB81AF0">
+    <End Role="Order" Type="Self.Order" Multiplicity="0..1" />
+    <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="orderID" />
+      </Principal>
+      <Dependent Role="OrderDetail">
+        <PropertyRef Name="orderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__OrderDeta__produ__4BAC3F29">
+    <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="productID" />
+      </Principal>
+      <Dependent Role="OrderDetail">
+        <PropertyRef Name="productID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Product__product__412EB0B6">
+    <End Role="ProductCategory" Type="Self.ProductCategory" Multiplicity="0..1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductCategory">
+        <PropertyRef Name="productCategoryID" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="productCategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__ProductDe__produ__440B1D61">
+    <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+    <End Role="ProductDetail" Type="Self.ProductDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="productID" />
+      </Principal>
+      <Dependent Role="ProductDetail">
+        <PropertyRef Name="productID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__UserDetai__usern__398D8EEE">
+    <End Role="Account" Type="Self.Account" Multiplicity="1" />
+    <End Role="UserDetail" Type="Self.UserDetail" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Account">
+        <PropertyRef Name="username" />
+      </Principal>
+      <Dependent Role="UserDetail">
+        <PropertyRef Name="username" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PRN292ModelStoreContainer">
+    <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Coupon" EntityType="Self.Coupon" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductCategory" EntityType="Self.ProductCategory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductDetail" EntityType="Self.ProductDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserDetail" EntityType="Self.UserDetail" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__Comment__product__4F7CD00D" Association="Self.FK__Comment__product__4F7CD00D">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="Comment" EntitySet="Comment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Comment__usernam__4E88ABD4" Association="Self.FK__Comment__usernam__4E88ABD4">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="Comment" EntitySet="Comment" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Coupon__username__3C69FB99" Association="Self.FK__Coupon__username__3C69FB99">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="Coupon" EntitySet="Coupon" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Order__discountC__47DBAE45" Association="Self.FK__Order__discountC__47DBAE45">
+      <End Role="Coupon" EntitySet="Coupon" />
+      <End Role="Order" EntitySet="Order" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Order__username__46E78A0C" Association="Self.FK__Order__username__46E78A0C">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="Order" EntitySet="Order" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderDeta__order__4AB81AF0" Association="Self.FK__OrderDeta__order__4AB81AF0">
+      <End Role="Order" EntitySet="Order" />
+      <End Role="OrderDetail" EntitySet="OrderDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK__OrderDeta__produ__4BAC3F29" Association="Self.FK__OrderDeta__produ__4BAC3F29">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="OrderDetail" EntitySet="OrderDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Product__product__412EB0B6" Association="Self.FK__Product__product__412EB0B6">
+      <End Role="ProductCategory" EntitySet="ProductCategory" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+    <AssociationSet Name="FK__ProductDe__produ__440B1D61" Association="Self.FK__ProductDe__produ__440B1D61">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ProductDetail" EntitySet="ProductDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK__UserDetai__usern__398D8EEE" Association="Self.FK__UserDetai__usern__398D8EEE">
+      <End Role="Account" EntitySet="Account" />
+      <End Role="UserDetail" EntitySet="UserDetail" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

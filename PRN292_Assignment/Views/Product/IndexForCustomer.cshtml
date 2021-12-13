@@ -1,0 +1,142 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout_Header_Nav.cshtml";
+    ViewBag.Title = "IndexForCustomer";
+}
+@using CakeShop.Models;
+@{
+    UserDetail user = Session["user"] as UserDetail;
+
+}
+<!-- Breadcrumb Section Begin -->
+@*<section class="breadcrumb-section set-bg" data-setbg="@Url.Content("~/Content/img/download.jpg")">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Manh Hieu Shop</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>*@
+<!-- Breadcrumb Section End -->
+<!-- Product Section Begin -->
+@if (user != null)
+{
+    if (user.Account.type == 1)
+    {
+        <div style="background-color: #FE9A2E; ">
+            <a href="@Url.Action("IndexForAdmin","Cart")"><input type="button" style="margin-left: 145px;width:260px;color:white;height:40px ;background-color: #FF6347;border:none" class="btn btn-warning" value="Go to Create Order"></a>
+        </div>
+    }
+}
+
+@*Sửa bachground của màn hình detail ở đây*@
+<section class="product spad" style="background-color: #FE9A2E;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-5">
+                <div class="sidebar">
+                    <div class="sidebar__item">
+                        <h4>Department</h4>
+                        <ul>
+                            @{
+                                List<ProductCategory> listPC = ViewData["ProductCategoryList"] as List<ProductCategory>;
+                                foreach (ProductCategory p in listPC)
+                                {
+                                    <li><a href="@Url.Action("IndexForCustomer", "Product", new { ID = p.productCategoryID })">@p.productCategoryName</a></li>
+                                }
+                            }
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-lg-9 col-md-7">
+                <div class="filter__item">
+                    <div class="row">
+
+                        <div class="col-lg-4 col-md-4">
+                            <div class="filter__found"style="color: #40FF00;">
+
+                                @{
+
+                                    if (ViewData["size"] != null)
+                                    {
+                                        <h6><span> @ViewData["size"] </span>  Products found </h6>
+                                    }
+                                    else
+                                    {
+                                        <h6 style="color: #40FF00;"> 0 Products found </h6>
+                                    }
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    @{
+                        List<ProductDetail> listP = ViewData["ProductList"] as List<ProductDetail>;
+                        if (listP != null)
+                        {
+                            foreach (ProductDetail p in listP)
+                            {
+                                <div class="col-lg-4 col-md-6 col-sm-6">
+                                    <div class="product__item">
+                                        <div class="product__item__pic set-bg" data-setbg="@Url.Content("~/Content/img/product/details/"+p.imageLink)">
+                                            <ul class="product__item__pic__hover">
+                                                <li>
+                                                    @{
+                                                        if (Session["user"] != null)
+                                                        {
+                                                            <a href="@Url.Action("InsertToCart","Cart", new { id = p.productID })"><i class="fa fa-shopping-cart"></i></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="@Url.Action("Login","Account")"><i class="fa fa-shopping-cart"></i></a>
+                                                        }
+                                                    }
+
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="product__item__text">
+                                            <h6><a href="@Url.Action("DetailsForCustomer","Product", new { id = p.productID })">@p.Product.productName</a></h6>
+                                            <h5>$@p.Product.price</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+                <div class="product__pagination">
+                    @{
+                        string style = "";
+                        for (int i = 1; i < Convert.ToInt32(ViewData["numberPage"]) + 1; i++)
+                        {
+                            style = (i == Convert.ToInt32(ViewData["index"])) ? " background: #7fad39; border - color: #7fad39; color: #ffffff;" : "";
+
+                            switch (Convert.ToString(ViewData["type"]))
+                            {
+                                case "Product":
+                                    <a href="@Url.Action("IndexForCustomer", "Product", new { index = i })" style="@style">@i</a>
+                                    break;
+                                case "ProductName":
+                                    <a href="@Url.Action("Search","Product", new {index = i, keyword = ViewData["keyword"]})" style="@style">@i</a>
+                                    break;
+                                case "ProductCID":
+                                    <a href="@Url.Action("IndexForCustomer","Product", new {index = i, id = ViewData["id"]})" style="@style">@i</a>
+                                    break;
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Product Section End -->

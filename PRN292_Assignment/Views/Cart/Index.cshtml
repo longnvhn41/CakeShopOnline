@@ -1,0 +1,88 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout_Header_Nav.cshtml";
+    ViewBag.Title = "Index";
+}
+@using CakeShop.Models;
+
+@{
+    List<Cart> list = Session["cart"] as List<Cart>;
+    float total = (float)Session["total"];
+    UserDetail u = Session["user"] as UserDetail;
+}
+<!-- Shoping Cart Section Begin -->
+<section class="shoping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="shoping__product">Products</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (Cart c in list)
+                                {
+                                    <tr>
+                                        <td class="shoping__cart__item">
+                                            <img src="img/cart/cart-3.jpg" alt="">
+                                            <h5>@c.Product.productName</h5>
+                                        </td>
+                                        <td class="shoping__cart__price">
+                                            @c.Product.price
+                                        </td>
+                                        <td class="shoping__cart__quantity">
+                                            <div class="quantity">
+                                                <a href="@Url.Action("Delete","Cart", new { id = c.Product.productID })"> <button class="btnSub">-</button></a>
+                                                <strong>@c.quantity</strong>
+                                                <a href="@Url.Action("Insert","Cart", new { id = c.Product.productID })"> <button class="btnAdd">+</button></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+            </div>
+            <div class="col-lg-6">
+            </div>
+            <div class="col-lg-6">
+                <div class="shoping__checkout">
+                    <h5>Cart Total</h5>
+                    <ul>
+                        <li>Total <span>@total</span></li>
+                    </ul>
+                    @{
+                        if (u.Account.type == 4)
+                        {
+                            <a href="#" class="primary-btn bg-dark">Your account was banned</a>
+                        }
+                        else if (total <= 0)
+                        {
+                            <a href="@Url.Action("IndexForCustomer", "Product")" class="primary-btn bg-dark">GO TO SHOP</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("CreateForCustomer","Order")" class="primary-btn bg-dark">PROCEED TO CHECKOUT</a>
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shoping Cart Section End --
+
